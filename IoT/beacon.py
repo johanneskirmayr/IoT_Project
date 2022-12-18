@@ -24,6 +24,7 @@ def main():
     mqtt.receive_message("button") #TODO: fill in topic
 
     #TODO: check if correct
+    # Check if start button is pressed on app
     while not started:
         # Check if "start" is in the message queue
         while not mqtt.message_queue.empty():
@@ -45,6 +46,8 @@ def main():
             for device in devices:
                 # Extract the UUID from the advertisement data
                 uuid = extract_uuid(device.getScanData())
+                #print all the data detailed
+
 
                 # Check if the UUID is already detected
                 if uuid in detected_uuids:
@@ -53,7 +56,7 @@ def main():
                 else:
                     # If not detected, add to the list
                                     # Check if the UUID is in the databank
-                    if uuid in databank:
+                    if uuid in databank[]:
                         # Add the UUID to the list of detected UUIDs
                         detected_uuids.append(uuid)
 
