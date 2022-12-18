@@ -43,5 +43,5 @@ client.publish(pub_topic, "START")
 
 while True:
     data = random_letter()
-    client.publish(pub_topic, str(data[0]))
+    #client.publish(pub_topic, str(data[0]))
     time.sleep(2.0)

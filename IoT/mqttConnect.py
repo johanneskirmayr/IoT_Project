@@ -6,15 +6,15 @@ from queue import Queue
 
 
 class MQTTClient:
-    def __init__(self, client_id, broker_ip, broker_port):
+    def __init__(self):
         # Create a client instance
-        self.client = mqtt_client.Client(client_id)
+        self.client = mqtt_client.Client()
         # Set the broker IP and port
-        self.broker_ip = broker_ip
-        self.broker_port = broker_port
+        # self.broker_ip = broker_ip
+        # self.broker_port = broker_port
         # Set username and password
-        #self.username = "mqtt_user"
-        #self.password = "mqtt_password"
+        # self.username = "mqtt_user"
+        # self.password = "mqtt_password"
         # Create a queue to store received messages
         self.message_queue = Queue()
 
@@ -30,9 +30,12 @@ class MQTTClient:
 
         # Set the callback function
         self.client.on_connect = on_connect
+        
+        # Set broker
+        self.broker = "test.mosquitto.org"
 
         # Connect to the broker
-        self.client.connect(self.broker_ip, self.broker_port)
+        self.client.connect(self.broker)
 
         return self.client
 
@@ -54,7 +57,6 @@ class MQTTClient:
 
     def on_message(self, client, userdata, message):
         # Callback function for when a message is received
-        self.message_queue.put(message)
-    
+        self.message_queue.put(message.payload.decode('utf-8'))
         # print("Received message '" + str(message.payload) + "' on topic '"
         #       + message.topic + "' with QoS " + str(message.qos))
