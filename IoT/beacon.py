@@ -1,7 +1,9 @@
+import os
 from bluepy.btle import Scanner
 import uuidDatabank
 import mqttConnect 
 from gtts import gTTS
+import playsound
 
 # Create list of already detected UUIDs
 detected_uuids = []
@@ -70,7 +72,10 @@ def main():
                         
                         # Play the voice message #TODO: look if it makes sense to directly trigger voice message or delay
                         tts = gTTS(text=voice_message, lang='en')
-                        print(voice_message)
+                        tts.save("voice_message.mp3")
+                        playsound.playsound("voice_message.mp3")
+                        #Delete the file after playing
+                        os.remove("voice_message.mp3")
 
                         #TODO: publish detected UUID via MQTT to the Android app
                         client.publish("iotlab/jj/test", room) #TODO: fill in topic
