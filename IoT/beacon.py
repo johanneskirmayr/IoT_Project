@@ -4,6 +4,7 @@ import uuidDatabank
 import mqttConnect 
 from gtts import gTTS
 import playsound
+import time
 
 # Create list of already detected UUIDs
 detected_uuids = []
@@ -17,6 +18,10 @@ def main():
     started = False
     stopped = False
 
+    # Define topics
+    roomTopic = "iotlab/jj/rooms"
+    commandTopic = "iotlab/jj/commands"
+
     # Connect to MQTT broker
     mqtt = mqttConnect.MQTTClient() #TODO: fill in
     client = mqtt.connect()
@@ -24,19 +29,22 @@ def main():
     uuidData = uuidDatabank.DataBank()
 
     #TODO: check if correct
-    # Subscribe to topic button via MQTT
-    mqtt.receive_message("iotlab/jj/test") #TODO: fill in topic
+    # Subscribe to topic via MQTT
+    mqtt.receive_message(commandTopic) 
 
     #TODO: check if correct
     # Check if start button is pressed on app
     while not started:
         # Check if "start" is in the message queue
+        # mqtt.receive_message(commandTopic)
         while not mqtt.message_queue.empty():
             message = mqtt.message_queue.get()
             # Remove the message from the queue
             if message == "START":
                 print("Scanner started!")
                 started = True
+                time.sleep(2) # there needs to be a small delay, so the app can catch the "START" command
+                client.publish(commandTopic, "START")
                 break
 
     while not stopped:
@@ -48,7 +56,7 @@ def main():
 
             # Loop through all the devices found
             for device in devices:
-                # Extract the UUID from the advertisement data
+                # Extract the UUID from the data
                 uuid = extract_uuid(device.getScanData())
                 #print all the data detailed
 
@@ -70,7 +78,7 @@ def main():
                         room = location["room"]
                         voice_message = location["voice_message"]
                         
-                        # Play the voice message #TODO: look if it makes sense to directly trigger voice message or delay
+                        # Play the voice message #TODO: test if it makes sense to directly trigger voice message or delay
                         tts = gTTS(text=voice_message, lang='en')
                         tts.save("voice_message.mp3")
                         playsound.playsound("voice_message.mp3")
@@ -78,13 +86,13 @@ def main():
                         os.remove("voice_message.mp3")
 
                         #TODO: publish detected UUID via MQTT to the Android app
-                        client.publish("iotlab/jj/test", room) #TODO: fill in topic
+                        client.publish(roomTopic, room) 
 
 
                         #TODO: check if detected UUID is the end beacon
 
-            #TODO: check if correct
-            # Check if "stop" is in the message queue
+            # Check if "RESET" is in the message queue
+            # mqtt.receive_message(commandTopic)
             while not mqtt.message_queue.empty():
                 message = mqtt.message_queue.get()
                 # Remove the message from the queue
@@ -98,7 +106,7 @@ def main():
             print("Scanning stopped")
             break
 
-# Function to extract the UUID from the advertisement data
+# Function to extract the UUID from the data
 def extract_uuid(data):
     newData = data[0]
     _, _, value = newData
