@@ -31,6 +31,7 @@ def main():
     mqtt.receive_message(commandTopic) 
 
     #TODO: check if correct
+    # Check if start button is pressed on app
     while not started:
         # Check if "start" is in the message queue
         # mqtt.receive_message(commandTopic)
@@ -55,6 +56,8 @@ def main():
             for device in devices:
                 # Extract the UUID from the data
                 uuid = extract_uuid(device.getScanData())
+                #print all the data detailed
+
 
                 # Check if the UUID is already detected
                 if uuid in detected_uuids and uuid != None:
