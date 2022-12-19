@@ -4,7 +4,8 @@ import paho.mqtt.publish as publish
 
 broker = "test.mosquitto.org"
 
-pub_topic = "iotlab/jj/test"
+roomTopic = "iotlab/jj/rooms"
+commandTopic = "iotlab/jj/commands"
 
 def on_connect(client, userdata, flags, rc):
 	if rc==0:
@@ -34,7 +35,8 @@ client.on_message = on_message
 print("Attempting to connect to broker " + broker)
 client.connect(broker)	# Broker address, port and keepalive (maximum period in seconds allowed between communications with the broker)
 client.loop_start()
-client.subscribe(pub_topic)
+client.subscribe(roomTopic)
+client.subscribe(commandTopic)
 
 while True:
     time.sleep(2.0)

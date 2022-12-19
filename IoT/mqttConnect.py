@@ -9,12 +9,6 @@ class MQTTClient:
     def __init__(self):
         # Create a client instance
         self.client = mqtt_client.Client()
-        # Set the broker IP and port
-        # self.broker_ip = broker_ip
-        # self.broker_port = broker_port
-        # Set username and password
-        # self.username = "mqtt_user"
-        # self.password = "mqtt_password"
         # Create a queue to store received messages
         self.message_queue = Queue()
 
@@ -25,9 +19,6 @@ class MQTTClient:
             else:
                 print("Failed to connect, return code %d\n", rc)
         
-        # Set the username and password
-        #self.client.username_pw_set(self.username, self.password)
-
         # Set the callback function
         self.client.on_connect = on_connect
         
