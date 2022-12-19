@@ -97,7 +97,6 @@ def main():
             # Stop scanning if CTRL-C is pressed
             print("Scanning stopped")
             break
-            #break
 
 # Function to extract the UUID from the advertisement data
 def extract_uuid(data):
