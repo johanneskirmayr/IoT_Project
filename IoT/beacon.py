@@ -80,9 +80,12 @@ def main():
                         
                         # Play the voice message #TODO: test if it makes sense to directly trigger voice message or delay
                         tts = gTTS(text=voice_message, lang='en')
+                        print("Saving audiofile!")
                         tts.save("voice_message.mp3")
+                        print("Playing audiofile!")
                         playsound.playsound("voice_message.mp3")
                         #Delete the file after playing
+                        print("Removing audiofile!")
                         os.remove("voice_message.mp3")
 
                         #TODO: publish detected UUID via MQTT to the Android app
