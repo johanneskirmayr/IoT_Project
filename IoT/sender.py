@@ -3,10 +3,24 @@ import random
 import string
 import paho.mqtt.client as mqtt
 import paho.mqtt.publish as publish
+import sys
+
+"""
+script to manually send a message to a topic. Usage: python3 sender.py <pub_topic> <message>
+"""
+
+# get pub topic and message from command line
+if len(sys.argv) != 3:
+	print("Usage: python3 sender.py <pub_topic> <message>")
+	print("Taking default values for topic and message")
+	pub_topic = "iotlab/jj/test"
+	message = "START"
+	
+else:
+	pub_topic = sys.argv[1]
+	message = sys.argv[2]
 
 broker = "test.mosquitto.org"
-
-pub_topic = "iotlab/jj/test"
 
 def on_connect(client, userdata, flags, rc):
 	if rc==0:
@@ -39,7 +53,8 @@ client.loop_start()
 def random_letter():
     return random.choices(string.ascii_uppercase, k=1)
 
-client.publish(pub_topic, "START")
+print("Publishing message to topic", pub_topic, ":", message)
+client.publish(pub_topic, message)
 
 while True:
     data = random_letter()

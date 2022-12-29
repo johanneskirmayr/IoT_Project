@@ -9,8 +9,10 @@ class MQTTClient:
     def __init__(self):
         # Create a client instance
         self.client = mqtt_client.Client()
-        # Create a queue to store received messages
-        self.message_queue = Queue()
+
+        # Create queues of the topics to store received messages
+        self.message_queue_commands = Queue()
+        self.message_queue_rooms = Queue()
 
     def connect(self):
         def on_connect(client, userdata, flags, rc):
@@ -48,6 +50,11 @@ class MQTTClient:
 
     def on_message(self, client, userdata, message):
         # Callback function for when a message is received
-        self.message_queue.put(message.payload.decode('utf-8'))
+        if message.topic == "iotlab/jj/commands":
+            self.message_queue_commands.put(message.payload.decode('utf-8'))
+        elif message.topic == "iotlab/jj/rooms":
+            self.message_queue_rooms.put(message.payload.decode('utf-8'))
+        
+        # self.message_queue.put(message.payload.decode('utf-8'))
         # print("Received message '" + str(message.payload) + "' on topic '"
         #       + message.topic + "' with QoS " + str(message.qos))

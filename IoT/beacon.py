@@ -5,6 +5,8 @@ import mqttConnect
 from gtts import gTTS
 import playsound
 import time
+import sys
+import subprocess
 
 # Create list of already detected UUIDs
 detected_uuids = []
@@ -23,28 +25,40 @@ def main():
     commandTopic = "iotlab/jj/commands"
 
     # Connect to MQTT broker
-    mqtt = mqttConnect.MQTTClient() #TODO: fill in
+    mqtt = mqttConnect.MQTTClient()
     client = mqtt.connect()
 
     uuidData = uuidDatabank.DataBank()
 
-    #TODO: check if correct
     # Subscribe to topic via MQTT
+    mqtt.receive_message(roomTopic)
     mqtt.receive_message(commandTopic) 
 
-    #TODO: check if correct
     # Check if start button is pressed on app
     while not started:
         # Check if "start" is in the message queue
         # mqtt.receive_message(commandTopic)
-        while not mqtt.message_queue.empty():
-            message = mqtt.message_queue.get()
+        while not mqtt.message_queue_commands.empty():
+            message = mqtt.message_queue_commands.get()
             # Remove the message from the queue
             if message == "START":
                 print("Scanner started!")
                 started = True
                 time.sleep(2) # there needs to be a small delay, so the app can catch the "START" command
                 client.publish(commandTopic, "START")
+
+                # get the destination room from the topic room message queue
+                if not mqtt.message_queue_rooms.empty():
+                    destination_room = mqtt.message_queue_rooms.get()
+                    # Remove the message from the queue
+                    print("Destination room: " + destination_room)
+                else: 
+                    print("No destination room found")
+                    destination_room = None
+
+                # Get the waypoints the user has to pass to get to the destination room
+                waypoints = uuidData.get_way(destination_room)
+
                 break
 
     while not stopped:
@@ -52,7 +66,7 @@ def main():
             # Create a scanner object
             scanner = Scanner()
             # Scan for devices
-            devices = scanner.scan(timeout=10, passive=True) # TODO: passive?
+            devices = scanner.scan(timeout=10, passive=True) 
 
             # Loop through all the devices found
             for device in devices:
@@ -78,31 +92,41 @@ def main():
                         room = location["room"]
                         voice_message = location["voice_message"]
                         
-                        # Play the voice message #TODO: test if it makes sense to directly trigger voice message or delay
+                        print("Detected new Bluetooth beacon of room: " + str(room))
+                        # Get the bridge voice message of the next waypoint
+                        if uuid in waypoints:
+                            # get the index of the uuid in the waypoints list
+                            index = waypoints.index(uuid)
+
+                            # check if the uuid is the last waypoint
+                            if index != 0:
+                                # add the bridge voice message of the next element in the list to the voice message
+                                bridge_message = uuidData.get_location(waypoints[index-1])["bridge_voice_message"]
+                                voice_message = voice_message + bridge_message
+                        # Play the voice message 
                         tts = gTTS(text=voice_message, lang='en')
-                        print("Saving audiofile!")
+                        #print("Saving audiofile!")
                         tts.save("voice_message.mp3")
-                        print("Playing audiofile!")
+                        #print("Playing audiofile!")
                         playsound.playsound("voice_message.mp3")
                         #Delete the file after playing
                         print("Removing audiofile!")
                         os.remove("voice_message.mp3")
 
-                        #TODO: publish detected UUID via MQTT to the Android app
-                        client.publish(roomTopic, room) 
-
-
-                        #TODO: check if detected UUID is the end beacon
+                        #Publish detected UUID via MQTT to the Android app
+                        client.publish(roomTopic, room)
 
             # Check if "RESET" is in the message queue
             # mqtt.receive_message(commandTopic)
-            while not mqtt.message_queue.empty():
-                message = mqtt.message_queue.get()
+            while not mqtt.message_queue_commands.empty():
+                message = mqtt.message_queue_commands.get()
                 # Remove the message from the queue
                 if message == "RESET":
                     stopped = True
                     print("Tour reset!")
-                    break
+                    # Call the script again
+                    subprocess.call([sys.executable, "beacon.py"])
+                    sys.exit()
                 
         except KeyboardInterrupt:
             # Stop scanning if CTRL-C is pressed
