@@ -103,6 +103,9 @@ def main():
                                 # add the bridge voice message of the next element in the list to the voice message
                                 bridge_message = uuidData.get_location(waypoints[index-1])["bridge_voice_message"]
                                 voice_message = voice_message + bridge_message
+                        
+                        if room == destination_room:
+                            voice_message = voice_message + "You have arrived at your destination. Thank you for using the tour guide! Have a nice day!"
                         # Play the voice message 
                         tts = gTTS(text=voice_message, lang='en')
                         #print("Saving audiofile!")
@@ -110,7 +113,7 @@ def main():
                         #print("Playing audiofile!")
                         playsound.playsound("voice_message.mp3")
                         #Delete the file after playing
-                        print("Removing audiofile!")
+                        #print("Removing audiofile!")
                         os.remove("voice_message.mp3")
 
                         #Publish detected UUID via MQTT to the Android app
