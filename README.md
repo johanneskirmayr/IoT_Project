@@ -5,12 +5,18 @@ The aim is to call a drone at the entrance of the building by pressing a button.
 
 ## Usage:
 - Install the needed packages (see below)
-- Run the script 'beacon.py' on the Raspberry Pi which is the main file with:
-'sudo python3 beacon.py' (sudo is needed to access to Bluetooth)
+- Run the script `beacon.py` on the Raspberry Pi which is the main file with:
+```
+sudo python3 beacon.py
+```
+(sudo is needed to access to Bluetooth)
 
 ### Other scripts:
-- sender.py: publishes a specified message to the specified topic to the MQTT broker; Usage: 'sudo python3 sender.py <message> <topic>'
-- receiver.py: subscribes to a topic and prints the received messages; Usage: specify the topic in the script and run it with 'sudo python3 receiver.py'
+- `sender.py`: publishes a specified message to the specified topic to the MQTT broker; 
+Usage: 
+```sudo python3 sender.py <message> <topic>```
+- `receiver.py`: subscribes to a topic and prints the received messages; Usage: specify the topic in the script and run it with 
+```sudo python3 receiver.py```
 
 ## Hardware:
 - Raspberry Pi with Bluetooth and WiFi
@@ -21,14 +27,14 @@ The aim is to call a drone at the entrance of the building by pressing a button.
 - bluepy (to detect BLE devices) - not available for Windows
 
 Install with:
-'pip install bluepy'
+```pip install bluepy```
 
 - gtts (Google's Text to Speech API)
 
 Install with:
-'pip install gTTS'
+```pip install gTTS```
 
 - playsound (to play the audio file)
 
 Install with:
-'pip install playsound'
+```pip install playsound```
