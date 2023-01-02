@@ -59,6 +59,12 @@ def main():
                 # Get the waypoints the user has to pass to get to the destination room
                 waypoints = uuidData.get_way(destination_room)
 
+                #TODO: check if correct
+                # Delete all entrys of uuidData.databank that are not in the waypoints list
+                for uuid in uuidData.databank:
+                    if uuid not in waypoints:
+                        del uuidData.databank[uuid]
+
                 break
 
     while not stopped:
@@ -118,6 +124,16 @@ def main():
 
                         #Publish detected UUID via MQTT to the Android app
                         client.publish(roomTopic, room)
+
+                        #TODO: check if correct
+                        # If the room is the destination room, reset the tour and publish RESET
+                        if room == destination_room:
+                            client.publish(commandTopic, "RESET")
+                            stopped = True
+                            print("Tour reset!")
+                            # Call the script again
+                            subprocess.call([sys.executable, "beacon.py"])
+                            sys.exit()
 
             # Check if "RESET" is in the message queue
             # mqtt.receive_message(commandTopic)
