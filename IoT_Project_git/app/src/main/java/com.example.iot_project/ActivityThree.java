@@ -1,10 +1,14 @@
 package com.example.iot_project;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.iot_project.R.drawable;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -17,20 +21,20 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class ActivityThree extends AppCompatActivity {
 
-    TextView info_field, room_field;
+    TextView room_field;
     Button reset_button;
     String room_topic, command_topic;
+    ImageView beacon_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_three);
 
-        info_field = (TextView) findViewById(R.id.info_field_activity_three);
         room_field = (TextView) findViewById(R.id.info_field_last_beacon);
         reset_button = (Button) findViewById(R.id.third_activity_reset_button);
+        beacon_image = (ImageView) findViewById(R.id.beacon_image);
 
-        info_field.setText("Insert picture here");
         room_field.setText("Last passed Beacon: NaN");
 
         room_topic = "iotlab/jj/rooms";
@@ -71,6 +75,24 @@ public class ActivityThree extends AppCompatActivity {
 
                 if (topic.equals(room_topic)) {
                     room_field.setText("Last passed beacon: " + newMessage);
+                    switch (newMessage) {
+                        case "A":
+                            beacon_image.setImageResource(drawable.A);
+                        case "B":
+                            beacon_image.setImageResource(drawable.B);
+                        case "C":
+                            beacon_image.setImageResource(drawable.C);
+                        case "D":
+                            beacon_image.setImageResource(drawable.D);
+                        case "E":
+                            beacon_image.setImageResource(drawable.E);
+                        case "F":
+                            beacon_image.setImageResource(drawable.F);
+                    }
+                } else if (topic.equals(command_topic)) {
+                    disconnect();
+                    Intent intent = new Intent(ActivityThree.this, MainActivity.class);
+                    startActivity(intent);
                 }
             }
             @Override
@@ -133,10 +155,8 @@ public class ActivityThree extends AppCompatActivity {
     }
 
     private void publish(String topicToPublish, String messageToPublish) {
-        final String topic = topicToPublish;
-        final String message = messageToPublish;
         try {
-            client.publish(topic, message.getBytes(),0,false);
+            client.publish(topicToPublish, messageToPublish.getBytes(),0,false);
         } catch (MqttException e) {
             System.out.println(e);
         }

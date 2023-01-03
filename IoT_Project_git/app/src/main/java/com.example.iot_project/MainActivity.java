@@ -139,10 +139,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void publish(String topicToPublish, String messageToPublish) {
-        final String topic = topicToPublish;
-        final String message = messageToPublish;
         try {
-            client.publish(topic, message.getBytes(),0,false);
+            client.publish(topicToPublish, messageToPublish.getBytes(),0,false);
         } catch (MqttException e) {
             System.out.println(e);
         }
