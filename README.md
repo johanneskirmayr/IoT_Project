@@ -29,6 +29,11 @@ Usage:
 Install with:
 ```pip install bluepy```
 
+- paho-mqtt (to communicate with the MQTT broker)
+
+Install with:
+```pip install paho-mqtt```
+
 - gtts (Google's Text to Speech API)
 
 Install with:

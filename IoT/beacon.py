@@ -59,7 +59,7 @@ def main():
                 # Get the waypoints the user has to pass to get to the destination room
                 waypoints = uuidData.get_way(destination_room)
 
-
+                # Create a new databank with only the waypoints
                 uuidData.databank = {uuid: uuidData.databank[uuid] for uuid in waypoints}
 
                 break
