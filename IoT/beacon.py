@@ -61,9 +61,9 @@ def main():
 
                 #TODO: check if correct
                 # Delete all entrys of uuidData.databank that are not in the waypoints list
-                for uuid in uuidData.databank:
-                    if uuid not in waypoints:
-                        del uuidData.databank[uuid]
+                #for uuid in uuidData.databank:
+                #    if uuid not in waypoints:
+                #        del uuidData.databank[uuid]
 
                 break
 
