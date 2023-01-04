@@ -59,11 +59,8 @@ def main():
                 # Get the waypoints the user has to pass to get to the destination room
                 waypoints = uuidData.get_way(destination_room)
 
-                #TODO: check if correct
-                # Delete all entrys of uuidData.databank that are not in the waypoints list
-                #for uuid in uuidData.databank:
-                #    if uuid not in waypoints:
-                #        del uuidData.databank[uuid]
+
+                uuidData.databank = {uuid: uuidData.databank[uuid] for uuid in waypoints}
 
                 break
 
@@ -112,6 +109,9 @@ def main():
                         
                         if room == destination_room:
                             voice_message = voice_message + "You have arrived at your destination. Thank you for using the tour guide! Have a nice day!"
+                        
+                        #Publish detected UUID via MQTT to the Android app
+                        client.publish(roomTopic, room)                        
                         # Play the voice message 
                         tts = gTTS(text=voice_message, lang='en')
                         #print("Saving audiofile!")
@@ -121,9 +121,6 @@ def main():
                         #Delete the file after playing
                         #print("Removing audiofile!")
                         os.remove("voice_message.mp3")
-
-                        #Publish detected UUID via MQTT to the Android app
-                        client.publish(roomTopic, room)
 
                         #TODO: check if correct
                         # If the room is the destination room, reset the tour and publish RESET
