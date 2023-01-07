@@ -2,7 +2,7 @@ import time
 import paho.mqtt.client as mqtt
 import paho.mqtt.publish as publish
 
-broker = "test.mosquitto.org"
+broker = "broker.hivemq.com"
 
 roomTopic = "iotlab/jj/rooms"
 commandTopic = "iotlab/jj/commands"

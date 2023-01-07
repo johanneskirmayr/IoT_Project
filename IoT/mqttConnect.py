@@ -25,7 +25,7 @@ class MQTTClient:
         self.client.on_connect = on_connect
         
         # Set broker
-        self.broker = "test.mosquitto.org"
+        self.broker = "broker.hivemq.com"
 
         # Connect to the broker
         self.client.connect(self.broker)
@@ -55,6 +55,3 @@ class MQTTClient:
         elif message.topic == "iotlab/jj/rooms":
             self.message_queue_rooms.put(message.payload.decode('utf-8'))
         
-        # self.message_queue.put(message.payload.decode('utf-8'))
-        # print("Received message '" + str(message.payload) + "' on topic '"
-        #       + message.topic + "' with QoS " + str(message.qos))
