@@ -20,15 +20,15 @@
             android:layout_marginTop="100dp"
             android:text="Text"
             android:textColor="@android:color/background_dark"
-            android:textStyle="bold"
-            android:textSize="8pt"/>
+            android:textSize="8pt"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/room_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="25dp"
             android:ems="10"
             android:hint="Room Name"
             android:inputType="text"
@@ -40,11 +40,11 @@
             android:layout_height="40dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"
+            android:backgroundTint="@color/button_back_color"
             android:text="Call Drone"
             android:textColor="@android:color/background_dark"
             android:textSize="15sp"
-            android:textStyle="bold"
-            android:backgroundTint="@color/button_back_color"/>
+            android:textStyle="bold" />
 
     </LinearLayout>
 </RelativeLayout>

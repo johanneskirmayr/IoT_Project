@@ -19,8 +19,8 @@
             android:layout_marginTop="100dp"
             android:text="Text1"
             android:textColor="@android:color/background_dark"
-            android:textStyle="bold"
-            android:textSize="8pt"/>
+            android:textSize="8pt"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/info_field_activity_two_2"
@@ -30,8 +30,8 @@
             android:layout_marginTop="25dp"
             android:text="Text2"
             android:textColor="@android:color/background_dark"
-            android:textStyle="bold"
-            android:textSize="8pt"/>
+            android:textSize="8pt"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/second_activity_reset_button"
@@ -39,11 +39,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"
+            android:backgroundTint="@color/button_back_color"
             android:text="Go Back to the start \n and reset drone!"
             android:textColor="@android:color/background_dark"
             android:textSize="15sp"
-            android:textStyle="bold"
-            android:backgroundTint="@color/button_back_color" />
+            android:textStyle="bold" />
 
     </LinearLayout>
 

@@ -11,13 +11,13 @@
         android:layout_gravity="center_vertical"
         android:orientation="vertical">
 
-       <ImageView
-           android:id="@+id/beacon_image"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_gravity="center_horizontal"
-           android:src="@drawable/A"
-           android:layout_marginTop="50dp" />
+        <ImageView
+            android:id="@+id/beacon_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/map" />
 
 
         <TextView
@@ -28,8 +28,8 @@
             android:layout_marginTop="25dp"
             android:text="Last passed Beacon: NaN"
             android:textColor="@android:color/background_dark"
-            android:textStyle="bold"
-            android:textSize="8pt" />
+            android:textSize="8pt"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/third_activity_reset_button"
@@ -37,11 +37,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"
+            android:backgroundTint="@color/button_back_color"
             android:text="Stop Tour!"
             android:textColor="@android:color/background_dark"
             android:textSize="15sp"
-            android:textStyle="bold"
-            android:backgroundTint="@color/button_back_color" />
+            android:textStyle="bold" />
 
     </LinearLayout>
 
