@@ -1,9 +1,11 @@
 package com.example.iot_project;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -36,6 +38,8 @@ public class ActivityTwo extends AppCompatActivity {
 
         command_topic = "iotlab/jj/commands";
 
+        /* The user can reset the tour e.g. if the user wants to go to a different room.
+        When this happens the activity disconnects from the browser and restarts the first activity */
         reset_button.setOnClickListener(v -> {
             publish(command_topic, "RESET");
             disconnect();
@@ -44,7 +48,7 @@ public class ActivityTwo extends AppCompatActivity {
         });
 
         connect();
-
+        // regular MQTT functions
         client.setCallback(new MqttCallbackExtended() {
             @Override
             public void connectComplete(boolean reconnect, String serverURI) {
@@ -56,6 +60,7 @@ public class ActivityTwo extends AppCompatActivity {
                     subscribe(command_topic);
                 }
             }
+
             @Override
             public void connectionLost(Throwable cause) {
                 System.out.println("The Connection was lost.");
@@ -67,15 +72,16 @@ public class ActivityTwo extends AppCompatActivity {
                 String newMessage = new String(message.getPayload());
                 System.out.println("Activity2 Incoming message: " + newMessage);
 
-               if (topic.equals(command_topic)) {
-                   if (newMessage.equals("START")) {
-                       disconnect();
-                       Intent intent = new Intent(ActivityTwo.this, ActivityThree.class);
-                       startActivity(intent);
-                   }
-               }
+                if (topic.equals(command_topic)) {
+                    if (newMessage.equals("START")) {
+                        disconnect();
+                        Intent intent = new Intent(ActivityTwo.this, ActivityThree.class);
+                        startActivity(intent);
+                    }
+                }
 
             }
+
             @Override
             public void deliveryComplete(IMqttDeliveryToken token) {
             }
@@ -83,8 +89,8 @@ public class ActivityTwo extends AppCompatActivity {
     }
 
     private MqttAndroidClient client;
-    private static final String SERVER_URI = "tcp://test.mosquitto.org:1883";
-    private static final String TAG = "MainActivity";
+    private static final String SERVER_URI = "tcp://broker.hivemq.com:1883";
+    private static final String TAG = "ActivityTwo";
 
     private void connect() {
         String clientId = MqttClient.generateClientId();
@@ -124,6 +130,7 @@ public class ActivityTwo extends AppCompatActivity {
                 public void onSuccess(IMqttToken asyncActionToken) {
                     System.out.println("Subscription successful to topic: " + topic);
                 }
+
                 @Override
                 public void onFailure(IMqttToken asyncActionToken,
                                       Throwable exception) {
@@ -137,7 +144,7 @@ public class ActivityTwo extends AppCompatActivity {
 
     private void publish(String topicToPublish, String messageToPublish) {
         try {
-            client.publish(topicToPublish, messageToPublish.getBytes(),0,false);
+            client.publish(topicToPublish, messageToPublish.getBytes(), 0, false);
         } catch (MqttException e) {
             System.out.println(e);
         }
