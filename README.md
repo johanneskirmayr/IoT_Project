@@ -1,16 +1,5 @@
 # IoT_Project
 
-# Nedded packages:
-- bluepy (to detect BLE devices)
-
-Install with:
-'pip install bluepy'
-or (Anaconda)
-''
-
-- gtts (Google's Text to Speech API)
-
-Install with:
-'pip install gTTS'
-or (Anaconda)
-'conda install -c conda-forge gtts'
+This branch is purely for the Android Studio files, so that they are not loaded onto the Raspberry Pi.
+The whole project is in the .zip file.
+Only the files that were changed because of this project are uploaded uncompressed.
